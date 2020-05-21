@@ -20,21 +20,21 @@ public abstract class ConsumerConfigure {
     private ConsumerConfig consumerConfig;
 
     // 开启消费者监听服务
-    public void listener(String topic, String tag) throws MQClientException {
-        log.info("开启" + topic + ":" + tag + "消费者-------------------");
+    public void listener() throws MQClientException {
         log.info(consumerConfig.toString());
 
         DefaultMQPushConsumer consumer = new DefaultMQPushConsumer(consumerConfig.getGroupName());
 
         consumer.setNamesrvAddr(consumerConfig.getNamesrvAddr());
 
-        consumer.subscribe(topic, tag);
+        consumer.subscribe("TopicTest", "*");
 
         // 开启内部类实现监听
         consumer.registerMessageListener(new MessageListenerConcurrently() {
             @Override
-            public ConsumeConcurrentlyStatus consumeMessage(List<MessageExt> msgs, ConsumeConcurrentlyContext context) {
-                return ConsumerConfigure.this.dealBody(msgs);
+            public ConsumeConcurrentlyStatus consumeMessage(List<MessageExt> list, ConsumeConcurrentlyContext consumeConcurrentlyContext) {
+                log.info("接收到消息============");
+                return ConsumerConfigure.this.dealBody(list);
             }
         });
 
@@ -46,5 +46,7 @@ public abstract class ConsumerConfigure {
     
     // 处理body的业务
     public abstract ConsumeConcurrentlyStatus dealBody(List<MessageExt> msgs);
+
+    public abstract String getTag();
 
 }
