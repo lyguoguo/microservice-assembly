@@ -36,6 +36,9 @@ public class RocketMQConsumer {
     @Value("${rocketmq.consumer.consumeThreadMax}")
     private int consumeThreadMax;
 
+    @Value("${rocketmq.consumer.maxConsumeTimes}")
+    private int maxConsumeTimes;
+
     @Bean(initMethod = "start", destroyMethod = "shutdown")
     public DefaultMQPushConsumer getRocketMQConsumer()
     {
@@ -43,6 +46,8 @@ public class RocketMQConsumer {
         consumer.setNamesrvAddr(namesrvAddr);
         consumer.setConsumeThreadMin(consumeThreadMin);
         consumer.setConsumeThreadMax(consumeThreadMax);
+        //消息重试次数
+        consumer.setMaxReconsumeTimes(maxConsumeTimes);
         consumer.setVipChannelEnabled(false);
         // 我们自己实现的监听类
         consumer.registerMessageListener(messageListen);
