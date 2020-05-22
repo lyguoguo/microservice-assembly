@@ -1,0 +1,8 @@
+延时消息总结
+1、producer端设置消息delayLevel延迟级别，消息属性DELAY中存储了对应了延时级别
+2、broker端收到消息后，判断延时消息延迟级别，如果大于0，则备份消息原始topic，queueId，并将消息topic改为延时消息队列特定topic(SCHEDULE_TOPIC)，queueId改为延时级别-1
+3、mq服务端ScheduleMessageService中，为每一个延迟级别单独设置一个定时器，定时(每隔1秒)拉取对应延迟级别的消费队列
+4、根据消费偏移量offset从commitLog中解析出对应消息
+5、从消息tagsCode中解析出消息应当被投递的时间，与当前时间做比较，判断是否应该进行投递
+6、若到达了投递时间，则构建一个新的消息，并从消息属性中恢复出原始的topic，queueId，并清除消息延迟属性，从新进行消息投递
+
