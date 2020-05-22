@@ -1,6 +1,6 @@
 package com.gly.rocketmq.config;
 
-import com.gly.rocketmq.service.MessageProcessor;
+import com.gly.rocketmq.factory.MessageProcessor;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyContext;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;
 import org.apache.rocketmq.client.consumer.listener.MessageListenerConcurrently;

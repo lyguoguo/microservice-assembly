@@ -1,4 +1,4 @@
-package com.gly.rocketmq.service;
+package com.gly.rocketmq.factory;
 
 import org.apache.rocketmq.common.message.MessageExt;
 

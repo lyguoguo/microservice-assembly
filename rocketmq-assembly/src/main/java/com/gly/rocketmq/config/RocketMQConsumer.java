@@ -47,7 +47,7 @@ public class RocketMQConsumer {
         // 我们自己实现的监听类
         consumer.registerMessageListener(messageListen);
         try {
-            consumer.subscribe(topic,"*");
+            consumer.subscribe(topic,tag);
             log.info("================>消费者创建完成，ConsumerGroupName{}<================",groupName);
             log.info("============>消费者监听开始,groupName:{},topic:{}<============",groupName,topic);
         } catch (MQClientException e) {
