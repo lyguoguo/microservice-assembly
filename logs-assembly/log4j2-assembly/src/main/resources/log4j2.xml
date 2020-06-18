@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--设置log4j2的自身log级别为warn-->
+<!--日志级别以及优先级排序: OFF > FATAL > ERROR > WARN > INFO > DEBUG > TRACE > ALL -->
+<!--Configuration后面的status，这个用于设置log4j2自身内部的信息输出，可以不设置，
+	当设置成trace时，你会看到log4j2内部各种详细输出-->
+<!--monitorInterval：Log4j能够自动检测修改配置 文件和重新配置本身，设置间隔秒数-->
+<configuration status="warn" monitorInterval="30">
+    <properties>
+        <property name="FILE_PATH">/data/ftp/log/study/microservice-assembly/logs-assembly/log4j2-assembly</property>
+        <property name="log.level.console">debug</property>
+    </properties>
+    <!--先定义所有的appender-->
+    <appenders>
+        <!--这个输出控制台的配置-->
+        <console name="Console" target="SYSTEM_OUT">
+            <!--输出日志的格式 时间日期 日志级别 进程ID 分隔符 线程名 Logger名 日志内容-->
+            <PatternLayout pattern="%d %-5p [TraceId:%X{traceId}] %t [%c{1.}:%L] - %m%n"/>
+            <!--自定义格式化json-->
+            <!--			<ElkJsonPatternLayout serviceName="log4j2-assembly"/>-->
+            <!--log4j2自带的json格式化工具-->
+            <!-- <JsonLayout compact="true" locationInfo="true" complete="false" eventEol="true" stacktraceAsString="true">&ndash;&gt;
+                <KeyValuePair key="timestamp" value="$${date:yyyy-MM-dd HH:mm:ss.SSS}" />
+                <KeyValuePair key="traceId" value="$${ctx:traceId}" />
+                <KeyValuePair key="cfClientIp" value="$${ctx:cfClientIp}" />
+                <KeyValuePair key="cfHead" value="$${ctx:cfHead}" />
+                <KeyValuePair key="cfPath" value="$${ctx:cfPath}" />
+                <KeyValuePair key="cfParams" value="$${ctx:cfParams}" />
+                <KeyValuePair key="serviceName" value="yt-med-cons" />
+             </JsonLayout>-->
+        </console>
+        <!--文件会打印出所有信息，这个log每次运行程序会自动清空，由append属性决定，这个也挺有用的，适合临时测试用-->
+        <File name="log" fileName="${FILE_PATH}/log.log" append="false">
+            <PatternLayout
+                    pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} -%5p [TraceId:%X{traceId}] ${PID:-} [%15.15t] [%c{1.}:%L] : %m%n"/>
+        </File>
+
+        <!-- 输出到文件，按天或者超过20MB分割 -->
+        <RollingFile name="RollingFile" fileName="${FILE_PATH}/defaultLog.log"
+                     filePattern="${FILE_PATH}/%d{yyyy-MM-dd}/defaultLog-%i.log">
+            <!-- 需要记录的级别 -->
+            <ThresholdFilter level="debug" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout
+                    pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} -%5p [TraceId:%X{traceId}] ${PID:-} [%15.15t] [%c{1.}:%L] : %m%n"/>
+            <Policies>
+                <OnStartupTriggeringPolicy/>
+                <TimeBasedTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy size="20 MB"/>
+            </Policies>
+        </RollingFile>
+    </appenders>
+
+    <Loggers>
+        <Root level="${log.level.console}"> <!-- 全局配置 -->
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="RollingFile"/>
+        </Root>
+
+        <Logger name="druid.sql.Statement" level="${log.level.console}" additivity="false">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="RollingFile"/>
+        </Logger>
+        <Logger name="druid.sql.ResultSet" level="${log.level.console}" additivity="false">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="RollingFile"/>
+        </Logger>
+        <logger name="org.apache.http" level="info"/>
+        <logger name="org.springframework" level="info"/>
+        <logger name="io.github.xdiamond.client" level="warn"/>
+        <logger name="io.netty.util" level="warn"/>
+        <Logger name="org.apache.zookeeper" level="error"/>
+        <Logger name="com.yuntai.openapi" level="error"/>
+        <logger name="com.yuntai.udb.auth" level="info"/>
+    </Loggers>
+
+</configuration>
