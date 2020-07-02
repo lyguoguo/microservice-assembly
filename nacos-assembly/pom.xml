@@ -18,10 +18,13 @@
     <modules>
         <module>nacos-config-project</module>
         <module>nacos-discovery-provider</module>
+        <module>nacos-discovery-consumer</module>
     </modules>
 
     <properties>
         <com.alibaba.cloud.version>2.1.0.RELEASE</com.alibaba.cloud.version>
+        <org.springframework.boot.version>2.1.3.RELEASE</org.springframework.boot.version>
+        <org.springframework.cloud.version>Greenwich.SR1</org.springframework.cloud.version>
     </properties>
 
     <dependencyManagement>
@@ -36,7 +39,14 @@
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
-                <version>2.1.3.RELEASE</version>
+                <version>${org.springframework.boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${org.springframework.cloud.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
