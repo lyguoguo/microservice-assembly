@@ -10,41 +10,19 @@ import org.springframework.stereotype.Component;
 @RefreshScope
 public class ApplicationConfig {
 
-    @Value("${open.config:false}")
-    private boolean openConfig;
-    @Value("${rocketmq.consumer.tag:test}")
-    private String rocketmqConsumerTag;
-    @Value("${push.prefix:alarm}")
-    private String pushPrefix;
+    @Value("${test.model}")
+    private String testModel;
 
-    public boolean isOpenConfig() {
-        return openConfig;
+    public String getTestModel() {
+        return testModel;
     }
 
-    public void setOpenConfig(boolean openConfig) {
-        this.openConfig = openConfig;
-    }
-
-    public String getRocketmqConsumerTag() {
-        return rocketmqConsumerTag;
-    }
-
-    public void setRocketmqConsumerTag(String rocketmqConsumerTag) {
-        this.rocketmqConsumerTag = rocketmqConsumerTag;
+    public void setTestModel(String testModel) {
+        this.testModel = testModel;
     }
 
     @Override
     public String toString() {
-        return "ApplicationConfig{" + "openConfig=" + openConfig + ", rocketmqConsumerTag='" + rocketmqConsumerTag
-                + '\'' + ", pushPrefix=" + pushPrefix
-                + '}';
-    }
-
-    public String getPushPrefix() {
-        return pushPrefix;
-    }
-
-    public void setPushPrefix(String pushPrefix) {
-        this.pushPrefix = pushPrefix;
+        return "ApplicationConfig{" + "testModel=" + testModel + '}';
     }
 }

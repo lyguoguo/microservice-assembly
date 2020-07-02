@@ -14,4 +14,24 @@
     <name>nacos-assembly</name>
     <description>nacos集成演示</description>
 
+    <modules>
+        <module>nacos-config-project</module>
+    </modules>
+
+    <properties>
+        <com.alibaba.cloud.version>2.1.0.RELEASE</com.alibaba.cloud.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-alibaba-dependencies</artifactId>
+                <version>${com.alibaba.cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
 </project>
