@@ -32,10 +32,25 @@ public class TestController {
         String info = "我在做Rocketmq消息收发测试，这是第"+"1"+"条消息，当前时间秒数："+System.currentTimeMillis()/1000;
         Message message = new Message("TopicTest", "Tag1", "12345", info.getBytes());
         //设置延迟消息
-        message.setDelayTimeLevel(delayTimeLevel);
+//        message.setDelayTimeLevel(delayTimeLevel);
                 // 这里用到了这个mq的异步处理，类似ajax，可以得到发送到mq的情况，并做相应的处理
                //不过要注意的是这个是异步的
         producer.send(message, new SendCallback() {
+            @Override
+            public void onSuccess(SendResult sendResult) {
+                log.info("传输成功");
+                log.info(JSON.toJSONString(sendResult));
+            }
+            @Override
+            public void onException(Throwable e) {
+                log.error("传输失败", e);
+            }
+        });
+        String info1 = "我在做Rocketmq TOPICTSET1 消息收发测试，这是第"+"1"+"条消息，当前时间秒数："+System.currentTimeMillis()/1000;
+        Message message1 = new Message("TopicTest1", "Tag1", "12345", info1.getBytes());
+        // 这里用到了这个mq的异步处理，类似ajax，可以得到发送到mq的情况，并做相应的处理
+        //不过要注意的是这个是异步的
+        producer.send(message1, new SendCallback() {
             @Override
             public void onSuccess(SendResult sendResult) {
                 log.info("传输成功");

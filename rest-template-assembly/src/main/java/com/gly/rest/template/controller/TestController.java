@@ -18,25 +18,9 @@ public class TestController {
     @Autowired
     private RestTemplate restTemplate;
 
-    @GetMapping("/test")
+    @GetMapping("/testforrest")
     public String test(){
-//        String rawParam = readRaw(request.getInputStream());
-//        JSONObject jsonObject = JSON.parseObject(rawParam);
-//        HttpHeaders headers = new HttpHeaders();
-//        Enumeration<String> headerNames = request.getHeaderNames();
-//        while (headerNames.hasMoreElements()) {
-//            String key = headerNames.nextElement();
-//            String value = request.getHeader(key);
-//            headers.add(key,value);
-//        }
-//        HttpEntity httpEntity = new HttpEntity<>(jsonObject, headers);
-//        ResponseEntity resultResponseEntity = restTemplate.exchange(
-//                remotePath,
-//                method, httpEntity, Object.class);
-//        if (resultResponseEntity.getStatusCode() == HttpStatus.OK) {
-//            return resultResponseEntity.getBody();
-//        }
-        ResponseEntity resultResponseEntity = restTemplate.getForEntity("http://127.0.0.1:9090/hello/hello",String.class);
+        ResponseEntity resultResponseEntity = restTemplate.getForEntity("http://47.114.140.237:9090/hello/hello",String.class);
         if (resultResponseEntity.getStatusCode() == HttpStatus.OK) {
             return (String) resultResponseEntity.getBody();
         }
