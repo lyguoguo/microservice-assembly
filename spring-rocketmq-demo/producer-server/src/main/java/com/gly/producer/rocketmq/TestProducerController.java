@@ -31,7 +31,7 @@ public class TestProducerController {
     @GetMapping("/test-rocketmq/sendMsg")
     public String testSendMsg(String tag) {
         log.info("消息发送时间：{}", DateFormatUtils.format(new Date(),"yyyy-MM-dd hh:mm:ss"));
-        String topic = "test-topic";
+        String topic = "YUNTAIMQ";
         Message message = MessageBuilder.withPayload(JSON.toJSONString(MyMessage.getInstance())).
                 setHeader("KEYS", System.currentTimeMillis()).build();
         rocketMQTemplate.asyncSend(topic + ":" +tag, message,new SendCallback(){

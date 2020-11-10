@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @RefreshScope
 public class ApplicationConfig {
 
-    @Value("${test.model}")
+    @Value("${test.com.gly.page.model}")
     private String testModel;
 
     public String getTestModel() {

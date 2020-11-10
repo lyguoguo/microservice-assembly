@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gly.page.dao.GatewayRoutesDao">
+  <resultMap id="BaseResultMap" type="com.gly.page.model.GatewayRoutes">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="route_id" jdbcType="VARCHAR" property="routeId" />
+    <result column="route_uri" jdbcType="VARCHAR" property="routeUri" />
+    <result column="route_order" jdbcType="INTEGER" property="routeOrder" />
+    <result column="predicates" jdbcType="VARCHAR" property="predicates" />
+    <result column="filters" jdbcType="VARCHAR" property="filters" />
+    <result column="auto_route" jdbcType="VARCHAR" property="autoRoute" />
+    <result column="health_path" jdbcType="VARCHAR" property="healthPath" />
+    <result column="is_ebl" jdbcType="BOOLEAN" property="isEbl" />
+    <result column="is_del" jdbcType="BOOLEAN" property="isDel" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, route_id, route_uri, route_order, predicates, filters, auto_route, health_path, 
+    is_ebl, is_del, create_time, update_time, remark
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from gateway_routes
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from gateway_routes
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.gly.page.model.GatewayRoutes" useGeneratedKeys="true">
+    insert into gateway_routes (route_id, route_uri, route_order, 
+      predicates, filters, auto_route, 
+      health_path, is_ebl, is_del, 
+      create_time, update_time, remark
+      )
+    values (#{routeId,jdbcType=VARCHAR}, #{routeUri,jdbcType=VARCHAR}, #{routeOrder,jdbcType=INTEGER}, 
+      #{predicates,jdbcType=VARCHAR}, #{filters,jdbcType=VARCHAR}, #{autoRoute,jdbcType=VARCHAR}, 
+      #{healthPath,jdbcType=VARCHAR}, #{isEbl,jdbcType=BOOLEAN}, #{isDel,jdbcType=BOOLEAN}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.gly.page.model.GatewayRoutes" useGeneratedKeys="true">
+    insert into gateway_routes
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="routeId != null">
+        route_id,
+      </if>
+      <if test="routeUri != null">
+        route_uri,
+      </if>
+      <if test="routeOrder != null">
+        route_order,
+      </if>
+      <if test="predicates != null">
+        predicates,
+      </if>
+      <if test="filters != null">
+        filters,
+      </if>
+      <if test="autoRoute != null">
+        auto_route,
+      </if>
+      <if test="healthPath != null">
+        health_path,
+      </if>
+      <if test="isEbl != null">
+        is_ebl,
+      </if>
+      <if test="isDel != null">
+        is_del,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="routeId != null">
+        #{routeId,jdbcType=VARCHAR},
+      </if>
+      <if test="routeUri != null">
+        #{routeUri,jdbcType=VARCHAR},
+      </if>
+      <if test="routeOrder != null">
+        #{routeOrder,jdbcType=INTEGER},
+      </if>
+      <if test="predicates != null">
+        #{predicates,jdbcType=VARCHAR},
+      </if>
+      <if test="filters != null">
+        #{filters,jdbcType=VARCHAR},
+      </if>
+      <if test="autoRoute != null">
+        #{autoRoute,jdbcType=VARCHAR},
+      </if>
+      <if test="healthPath != null">
+        #{healthPath,jdbcType=VARCHAR},
+      </if>
+      <if test="isEbl != null">
+        #{isEbl,jdbcType=BOOLEAN},
+      </if>
+      <if test="isDel != null">
+        #{isDel,jdbcType=BOOLEAN},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gly.page.model.GatewayRoutes">
+    update gateway_routes
+    <set>
+      <if test="routeId != null">
+        route_id = #{routeId,jdbcType=VARCHAR},
+      </if>
+      <if test="routeUri != null">
+        route_uri = #{routeUri,jdbcType=VARCHAR},
+      </if>
+      <if test="routeOrder != null">
+        route_order = #{routeOrder,jdbcType=INTEGER},
+      </if>
+      <if test="predicates != null">
+        predicates = #{predicates,jdbcType=VARCHAR},
+      </if>
+      <if test="filters != null">
+        filters = #{filters,jdbcType=VARCHAR},
+      </if>
+      <if test="autoRoute != null">
+        auto_route = #{autoRoute,jdbcType=VARCHAR},
+      </if>
+      <if test="healthPath != null">
+        health_path = #{healthPath,jdbcType=VARCHAR},
+      </if>
+      <if test="isEbl != null">
+        is_ebl = #{isEbl,jdbcType=BOOLEAN},
+      </if>
+      <if test="isDel != null">
+        is_del = #{isDel,jdbcType=BOOLEAN},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.gly.page.model.GatewayRoutes">
+    update gateway_routes
+    set route_id = #{routeId,jdbcType=VARCHAR},
+      route_uri = #{routeUri,jdbcType=VARCHAR},
+      route_order = #{routeOrder,jdbcType=INTEGER},
+      predicates = #{predicates,jdbcType=VARCHAR},
+      filters = #{filters,jdbcType=VARCHAR},
+      auto_route = #{autoRoute,jdbcType=VARCHAR},
+      health_path = #{healthPath,jdbcType=VARCHAR},
+      is_ebl = #{isEbl,jdbcType=BOOLEAN},
+      is_del = #{isDel,jdbcType=BOOLEAN},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      remark = #{remark,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <select id="selectAll" resultMap="BaseResultMap">
+    select
+    id, route_id, route_uri, route_order, predicates, filters, auto_route, health_path,
+    is_ebl, is_del, create_time, update_time
+    from gateway_routes
+  </select>
+
+  <select id="selectAll_COUNT" resultType="Long">
+    select
+    count(distinct id)
+    from gateway_routes
+  </select>
+</mapper>

@@ -47,7 +47,9 @@ public class RedisLock {
 
     public void unlock(String lockKey) {
         RLock lock = redissonClient.getLock(lockKey);
-        lock.unlock();
+        if(lock.isHeldByCurrentThread()){
+            lock.unlock();
+        }
     }
 
     public void unlock(RLock lock) {
