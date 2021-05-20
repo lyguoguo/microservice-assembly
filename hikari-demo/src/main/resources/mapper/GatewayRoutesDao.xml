@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gly.hikari.dao.GatewayRoutesDao">
+
+    <resultMap type="com.gly.hikari.entity.GatewayRoutes" id="GatewayRoutesMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="routeId" column="route_id" jdbcType="VARCHAR"/>
+        <result property="routeUri" column="route_uri" jdbcType="VARCHAR"/>
+        <result property="routeOrder" column="route_order" jdbcType="INTEGER"/>
+        <result property="predicates" column="predicates" jdbcType="VARCHAR"/>
+        <result property="filters" column="filters" jdbcType="VARCHAR"/>
+        <result property="isEbl" column="is_ebl" jdbcType="INTEGER"/>
+        <result property="isDel" column="is_del" jdbcType="INTEGER"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="remark" column="remark" jdbcType="VARCHAR"/>
+        <result property="autoRoute" column="auto_route" jdbcType="VARCHAR"/>
+        <result property="healthPath" column="health_path" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <resultMap extends="GatewayRoutesMap" id="ResultMapWithBLOBs" type="com.gly.hikari.entity.GatewayRoutes">
+        <result column="predicates" jdbcType="LONGVARCHAR" property="predicates" />
+        <result column="filters" jdbcType="LONGVARCHAR" property="filters" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, route_id, route_uri, route_order, is_ebl, is_del, create_time, update_time,remark,auto_route,health_path
+    </sql>
+
+    <sql id="Blob_Column_List">
+        predicates, filters
+    </sql>
+
+
+    <!-- 获取所有已启用、未删除的路由信息 -->
+    <select id="getRoutes"  resultMap="ResultMapWithBLOBs">
+        select
+        <include refid="Base_Column_List" />
+        ,
+        <include refid="Blob_Column_List" />
+        from gateway_routes
+        order by id desc
+    </select>
+
+</mapper>

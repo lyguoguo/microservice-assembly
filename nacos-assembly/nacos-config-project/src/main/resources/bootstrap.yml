@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: yt-springboot-admin
+  cloud:
+    nacos:
+      username: 1223
+      password: 124
+      config:
+        server-addr: 127.0.3.23:8849
+        namespace: 4bed6aa1-4cff-4244-9a5c-ef8add9cbb05
+
+
+server:
+  port: 9080
