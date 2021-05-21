@@ -27,7 +27,7 @@ public class DemoServiceTest {
 
         //CREATE
         GatewayRoutes o = new GatewayRoutes();
-        o.setId(99990008l);
+        o.setId(99990015l);
         o.setRouteId("test-demo");
         o.setCreateTime(new Date());
         o.setRouteUri("lb://test-demo");
@@ -38,7 +38,7 @@ public class DemoServiceTest {
         Assert.assertNotNull(i);
 
 //        //READ
-        o = service.findById(99990008l);
+        o = service.findById(99990015l);
         Assert.assertNotNull(o);
         System.out.println("结果："+o.getRouteUri());
 

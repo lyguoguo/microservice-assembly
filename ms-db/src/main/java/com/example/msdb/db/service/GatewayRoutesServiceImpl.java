@@ -1,7 +1,7 @@
 package com.example.msdb.db.service;
 
-import com.example.msdb.datasource.annocation.Master;
-import com.example.msdb.datasource.annocation.Slave;
+import com.example.msdb.datasource.annotation.Master;
+import com.example.msdb.datasource.annotation.Slave;
 import com.example.msdb.db.dao.GatewayRoutesMapper;
 import com.example.msdb.db.entity.GatewayRoutes;
 import com.example.msdb.db.entity.GatewayRoutesExample;
@@ -30,13 +30,14 @@ public class GatewayRoutesServiceImpl implements GatewayRoutesService{
         return gatewayRoutesMapper.updateByPrimaryKeySelective(gatewayRoutes);
     }
 
-//    @Master
+    @Slave
     @Override
     public int insert(GatewayRoutes gatewayRoutes) {
         return gatewayRoutesMapper.insertSelective(gatewayRoutes);
     }
 
-    @Slave
+//    @Slave
+//    @Master
     @Override
     public GatewayRoutes findById(long id) {
         GatewayRoutesExample example = new GatewayRoutesExample();
