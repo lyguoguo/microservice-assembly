@@ -1,0 +1,203 @@
+server:
+  port: 8097
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  application:
+    name: sharding-jdbc-demo
+mybatis:
+  mapper-locations: classpath*:mapper/*.xml
+  type-aliases-package: com.example.sharding.entity
+
+##########################################单库分表######################################
+#sharding:
+#  jdbc:
+#    datasource:
+#      names: ds0
+#      # 数据源ds0
+#      ds0:
+#        type: com.alibaba.druid.pool.DruidDataSource
+#        driver-class-name: com.mysql.jdbc.Driver
+#        url: jdbc:mysql://localhost:3306/test_order
+#        username: root
+#        password: 123456
+#    config:
+#      sharding:
+#        props:
+#          sql.show: true
+#        tables:
+#          t_user:  #t_user表
+#            key-generator-column-name: id  #主键
+#            actual-data-nodes: ds0.t_user${0..1}    #数据节点,均匀分布
+#            table-strategy:  #分表策略
+#              inline: #行表达式
+#                sharding-column: sex
+#                algorithm-expression: t_user${sex % 2}  #按模运算分配
+
+
+#########################################分库分表#####################################
+###数据源名称，多数据源以逗号分隔
+#sharding:
+#  jdbc:
+#    datasource:
+#      names: ds0,ds1
+#      # 数据源ds0
+#      ds0:
+#        type: com.alibaba.druid.pool.DruidDataSource
+#        driver-class-name: com.mysql.jdbc.Driver
+#        url: jdbc:mysql://localhost:3306/order1
+#        username: root
+#        password: 123456
+#      # 数据源ds1
+#      ds1:
+#        type: com.alibaba.druid.pool.DruidDataSource
+#        driver-class-name: com.mysql.jdbc.Driver
+#        url: jdbc:mysql://localhost:3306/order2
+#        username: root
+#        password: 123456
+#    config:
+#      sharding:
+#        props:
+#          sql.show: true
+#        tables:
+#          t_user:  #t_user表
+#            key-generator-column-name: id  #主键
+#            actual-data-nodes: ds${0..1}.t_user${0..1}    #数据节点,均匀分布
+#            database-strategy:   #分库策略
+#              inline: #行表达式
+#                sharding-column: city_id        #列名称，多个列以逗号分隔
+#                algorithm-expression: ds${city_id % 2}    #按模运算分配
+#            table-strategy:  #分表策略
+#              inline: #行表达式
+#                sharding-column: sex
+#                algorithm-expression: t_user${sex % 2}
+#          t_address:
+#            key-generator-column-name: id
+#            actual-data-nodes: ds${0..1}.t_address
+#            database-strategy:
+#              inline:
+#                sharding-column: lit
+#                algorithm-expression: ds${lit % 2}
+
+###################################读写分离###################################
+#sharding:
+#  jdbc:
+#    config:
+#      masterslave:
+#        load-balance-algorithm-type: round_robin
+#        master-data-source-name: master
+#        name: ms
+#        slave-data-source-names: slave0,slave1
+#      props:
+#        sql:
+#          show: true
+#    datasource:
+#      names: master,slave0,slave1
+#      master:
+#        driver-class-name: com.mysql.jdbc.Driver
+#        type: com.alibaba.druid.pool.DruidDataSource
+#        url: jdbc:mysql://localhost:3306/order1
+#        username: root
+#        password: 123456
+#      slave0:
+#        driver-class-name: com.mysql.jdbc.Driver
+#        type: com.alibaba.druid.pool.DruidDataSource
+#        url: jdbc:mysql://localhost:3306/order2
+#        username: root
+#        password: 123456
+#      slave1:
+#        driver-class-name: com.mysql.jdbc.Driver
+#        type: com.alibaba.druid.pool.DruidDataSource
+#        url: jdbc:mysql://localhost:3306/order3
+#        username: root
+#        password: 123456
+
+########################################分库分表+读写分离########################################
+sharding:
+  jdbc:
+    config:
+      sharding:
+        binding-tables: t_order,t_order_item
+#        broadcast-tables: t_config
+        broadcast-tables: t_address
+        default-database-strategy:
+          inline:
+            algorithm-expression: master$->{user_id % 2}
+            sharding-column: user_id
+        default-key-generator-class-name: io.shardingsphere.core.keygen.DefaultKeyGenerator
+        master-slave-rules:
+          ds0:
+            master-data-source-name: master0
+            slave-data-source-names: master0slave0, master0slave1
+            load-balance-algorithm-type: ROUND_ROBIN
+#            configMap:
+#              master-slave-key0: master-slave-value0
+          ds1:
+            master-data-source-name: master1
+            slave-data-source-names: master1slave0, master1slave1
+            load-balance-algorithm-type: RANDOM
+#            config-map:
+#              master-slave-key1: master-slave-value1
+        tables:
+          t_order:
+            actual-data-nodes: ds$->{0..1}.t_order$->{0..1}
+            key-generator-column-name: order_id
+            table-strategy:
+              inline:
+                algorithm-expression: t_order$->{order_id % 2}
+                sharding-column: order_id
+          t_order_item:
+            actual-data-nodes: ds$->{0..1}.t_order_item$->{0..1}
+            key-generator-column-name: order_item_id
+            table-strategy:
+              inline:
+                algorithm-expression: t_order_item$->{order_id % 2}
+                sharding-column: order_id
+#          t_address:
+#            key-generator:
+#              column: id
+#              type: SNOWFLAKE
+      props:
+        sql:
+          show: true
+    datasource:
+      names: master0,master1,master0slave0,master0slave1,master1slave0,master1slave1
+      master0:
+        driver-class-name: com.mysql.jdbc.Driver
+        type: com.alibaba.druid.pool.DruidDataSource
+        url: jdbc:mysql://localhost:3306/master0
+        username: root
+        password: 123456
+      master0slave0:
+        driver-class-name: com.mysql.jdbc.Driver
+        type: com.alibaba.druid.pool.DruidDataSource
+        url: jdbc:mysql://localhost:3306/master0slave0
+        username: root
+        password: 123456
+      master0slave1:
+        driver-class-name: com.mysql.jdbc.Driver
+        type: com.alibaba.druid.pool.DruidDataSource
+        url: jdbc:mysql://localhost:3306/master0slave1
+        username: root
+        password: 123456
+      master1:
+        driver-class-name: com.mysql.jdbc.Driver
+        type: com.alibaba.druid.pool.DruidDataSource
+        url: jdbc:mysql://localhost:3306/master1
+        username: root
+        password: 123456
+      master1slave0:
+        driver-class-name: com.mysql.jdbc.Driver
+        type: com.alibaba.druid.pool.DruidDataSource
+        url: jdbc:mysql://localhost:3306/master1slave0
+        username: root
+        password: 123456
+      master1slave1:
+        driver-class-name: com.mysql.jdbc.Driver
+        type: com.alibaba.druid.pool.DruidDataSource
+        url: jdbc:mysql://localhost:3306/master1slave1
+        username: root
+        password: 123456
+
+
+
